@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 var KEY='drill.v2', INT=[0,1,2,4,8,16,32];
-var TOPIC_ORDER=['Accounting','Enterprise Value','DCF','WACC','Comps','M&A','LBO','Debt','Healthcare','Deal Book','Markets & SaaS','Mental'];
+var TOPIC_ORDER=['Finance Basics','Accounting','Enterprise Value','DCF','WACC','Comps','M&A','LBO','Debt','Capital Markets','Restructuring','Healthcare','Deal Book','Industries','Markets & SaaS','Mental'];
 var app=document.getElementById('app');
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function hash(s){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return 'c'+(h>>>0).toString(36);}
@@ -16,7 +16,7 @@ var TOPICS=TOPIC_ORDER.filter(function(t){return CARDS.some(function(c){return c
 CARDS.forEach(function(c){if(TOPICS.indexOf(c.topic)<0)TOPICS.push(c.topic);});
 
 /* storage */
-function fresh(){return {v:2,cards:{},days:{},streak:{best:{},cleared:0,runs:[]},set:{theme:'auto',per:20}};}
+function fresh(){return {v:2,cards:{},days:{},streak:{best:{},cleared:0,runs:[]},set:{theme:'auto',per:20},resume:null,last:null};}
 function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r),f=fresh();for(var k in f)if(o[k]==null)o[k]=f[k];for(var k2 in f.set)if(o.set[k2]==null)o.set[k2]=f.set[k2];if(!o.streak.best)o.streak.best={};if(!o.streak.runs)o.streak.runs=[];return o;}}catch(e){}return fresh();}
 var S=load();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
@@ -53,6 +53,34 @@ function record(id,ok,relearn){
     S.cards[id]=s;}
   save();
 }
+
+/* resume */
+function persist(){
+  if(!sess||V!=='card'){return;}
+  var o={kind:sess.kind,title:sess.title,i:sess.i,right:sess.right,wrong:sess.wrong,shown:false,hint:false,t:Date.now()};
+  o.missed=sess.missed.map(function(c){return c.id?{id:c.id}:{g:c};});
+  if(sess.kind==='deck'){o.q=sess.q.map(function(c){return c.id;});o.re=sess.re;}
+  else{o.cur=sess.cur.id?{id:sess.cur.id}:{g:sess.cur};}
+  if(sess.kind==='streak'){o.run=sess.run;o.best=sess.best;o.topics=sess.topics;o.flips=sess.flips;o.sc={topic:sc.topic,level:sc.level,target:sc.target};}
+  S.resume=o;save();
+}
+function unpack(x){return x.id?BYID[x.id]:x.g;}
+function resumeSess(){
+  var o=S.resume;if(!o)return false;
+  try{
+    var r={kind:o.kind,title:o.title,i:o.i,right:o.right,wrong:o.wrong,shown:false,hint:false,missed:(o.missed||[]).map(unpack).filter(Boolean)};
+    if(o.kind==='deck'){r.q=o.q.map(function(id){return BYID[id];}).filter(Boolean);r.re=o.re||{};if(r.i>=r.q.length)return false;}
+    else{r.cur=unpack(o.cur);if(!r.cur)r.cur=o.kind==='mental'?nextMental():GEN.streak(o.sc.topic,o.sc.level);r.re={};}
+    if(o.kind==='streak'){r.run=o.run;r.best=o.best;r.topics=o.topics||{};r.flips=o.flips||[];r.t0=Date.now();r.flip=null;sc.topic=o.sc.topic;sc.level=o.sc.level;sc.target=o.sc.target;}
+    sess=r;V='card';return true;
+  }catch(e){S.resume=null;save();return false;}
+}
+function clearResume(){if(S.resume){S.resume=null;save();}}
+function logSession(){
+  var n=sess.right+sess.wrong;if(!n)return;
+  S.last={d:dkey(),title:sess.kind==='streak'?'Streak L'+sc.level:sess.title,right:sess.right,n:n,best:sess.kind==='streak'?sess.best:null};save();
+}
+function ago(k){var d=Math.round((today()-Math.floor(new Date(k+'T00:00:00').getTime()/86400000)));return d<=0?'today':d===1?'yesterday':d+' days ago';}
 
 /* sessions */
 function startDeck(title,cards){if(!cards.length){toast('Nothing here yet');return;}sess={kind:'deck',title:title,q:cards.slice(),i:0,shown:false,hint:false,right:0,wrong:0,missed:[],re:{}};V='card';render();}
@@ -117,7 +145,7 @@ function endStreak(){
   var n=sess.right+sess.wrong;
   if(n){var b=S.streak.best;if(!b[sc.level]||sess.best>b[sc.level])b[sc.level]=sess.best;if(sess.cleared)S.streak.cleared=(S.streak.cleared||0)+1;
     S.streak.runs.unshift({d:dkey(),topic:sc.topic,level:sc.level,target:sc.target,n:n,right:sess.right,best:sess.best,cleared:!!sess.cleared,flip:Math.round(avg(sess.flips))});S.streak.runs=S.streak.runs.slice(0,50);save();V='done';}
-  else{sess=null;V='home';}
+  else{sess=null;clearResume();V='home';}
   render();
 }
 function viewDone(){
@@ -141,7 +169,9 @@ function viewHome(){
   var c=counts(),d=new Date(),days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],mo=['January','February','March','April','May','June','July','August','September','October','November','December'];
   var td=S.days[dkey()]||{n:0};
   var h='<h1>Drill</h1><div class="date">'+days[d.getDay()]+', '+mo[d.getMonth()]+' '+d.getDate()+(td.n?' · '+td.n+' today':'')+'</div>';
+  if(S.last)h+='<div class="date" style="margin-top:2px">Last: '+esc(S.last.title)+', '+S.last.right+' of '+S.last.n+', '+ago(S.last.d)+'</div>';
   h+='<div class="sec">Practice</div>';
+  if(S.resume){var R=S.resume,lab=R.kind==='deck'?(R.i+1)+' of '+R.q.length:R.kind==='streak'?'streak '+(R.run||0):R.i+' done';h+=row('Continue: '+R.title,lab,'resume');}
   h+=row('Review',c.due?c.due+' due':'New cards','review');
   h+=row('Mental math','In your head','mental');
   h+=row('Streak',(S.streak.best[sc.level]?'Best '+S.streak.best[sc.level]:'Randomized'),'streakset');
@@ -195,8 +225,8 @@ function shareBackup(){
 }
 
 function render(){
-  if(V==='card'&&sess)return viewCard();
-  if(V==='done'&&sess)return viewDone();
+  if(V==='card'&&sess){persist();return viewCard();}
+  if(V==='done'&&sess){if(!sess.logged){sess.logged=1;logSession();clearResume();}return viewDone();}
   if(V==='streakset')return viewStreakSet();
   if(V==='progress')return viewProgress();
   if(V==='settings')return viewSettings();
@@ -205,6 +235,7 @@ function render(){
 function act(a,v){
   switch(a){
     case 'home':sess=null;V='home';arm=false;render();break;
+    case 'resume':if(!resumeSess()){clearResume();toast('Nothing to continue');}render();break;
     case 'review':var due=CARDS.filter(function(c){var s=st(c.id);return s&&s.d<=today();});startDeck('Review',buildDeck(due.length?due.concat(CARDS.filter(function(c){return !st(c.id);})):CARDS,S.set.per));break;
     case 'mental':startMental();break;
     case 'missed':startDeck('Missed',shuffle(CARDS.filter(function(c){var s=st(c.id);return s&&s.m;})));break;
@@ -222,7 +253,7 @@ function act(a,v){
     case 'again':grade(false);break;
     case 'close':
       if(sess.kind==='streak')return endStreak();
-      if(sess.right+sess.wrong===0){sess=null;V='home';return render();}
+      if(sess.right+sess.wrong===0){sess=null;clearResume();V='home';return render();}
       V='done';render();break;
     case 'redo':var seen={},ms=sess.missed.filter(function(c){if(seen[c.id])return false;seen[c.id]=1;return true;});startDeck('Missed',shuffle(ms));break;
     case 'copyres':copyText(streakText(),'Copied');break;
@@ -245,9 +276,16 @@ document.addEventListener('keydown',function(e){
 });
 if(window.matchMedia){try{window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',theme);}catch(e){}}
 try{if('serviceWorker' in navigator&&location.protocol!=='file:'){
-  var hadCtrl=!!navigator.serviceWorker.controller;
-  navigator.serviceWorker.addEventListener('controllerchange',function(){if(hadCtrl&&V==='home'&&!sess)location.reload();hadCtrl=true;});
-  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});
+  var hadCtrl=!!navigator.serviceWorker.controller,pendingReload=false;
+  navigator.serviceWorker.addEventListener('controllerchange',function(){
+    if(!hadCtrl){hadCtrl=true;return;}
+    try{sessionStorage.setItem('drill.updated','1');}catch(e){}
+    if(V==='card'&&sess)persist();
+    location.reload();
+  });
+  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(r){try{r.update();}catch(e){}}).catch(function(){});});
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'){navigator.serviceWorker.getRegistration().then(function(r){if(r)r.update().catch(function(){});});}});
 }}catch(e){}
+try{if(sessionStorage.getItem('drill.updated')){sessionStorage.removeItem('drill.updated');setTimeout(function(){toast('Updated to the latest version');},400);if(S.resume)resumeSess();}}catch(e){}
 render();
 })();

@@ -1,4 +1,4 @@
-var CACHE='drill-2026-11-13-506e97';
+var CACHE='drill-2026-11-13-446a11';
 var FILES=['./','index.html','styles.css','app.js','gen.js','cards.js','manifest.webmanifest','icons/icon-180.png','icons/icon-192.png','icons/icon-512.png'];
 self.addEventListener('install',function(e){
   e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(FILES.map(function(u){return new Request(u,{cache:'reload'});}));}).then(function(){return self.skipWaiting();}));

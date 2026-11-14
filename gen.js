@@ -161,9 +161,17 @@ function gSyn(L){
   return {topic:'M&A',q:'Standalone EPS $'+f(a)+', pro forma EPS $'+f(pf)+' on '+sh+'M pro forma shares. Tax '+pc(t,0)+'. Pretax synergies to break even?',a:A('$'+f(need,1)+'M.',['EPS gap $'+f(gap)+' x '+sh+'M shares = $'+f(gap*sh,1)+'M after tax.','Gross up: / (1 - '+t+').'])};
 }
 
+
+function gSale(L){
+  var E=pick(range(50,300,10)),m=pick(range(7,14,1)),a=pick([0.1,0.15,0.2,0.25]),sm=pick([m-4,m-2,m+2,m+4].filter(function(x){return x>1;}));
+  var ae=E*a,ev0=E*m,ev1=ev0-ae*sm,e1=E-ae,m1=ev1/e1;
+  return {topic:'Comps',q:'A company has $'+E+'M of EBITDA and trades at '+m+'x. It sells a division with $'+f(ae,1)+'M of EBITDA for '+sm+'x that EBITDA, in cash. New EV/EBITDA?',
+    a:A(f(m1,2)+'x, '+(m1>m?'up':'down')+' from '+m+'x.',['EV: '+f(ev0,0)+' - cash in '+f(ae*sm,1)+' = '+f(ev1,1)+'.','EBITDA: '+E+' - '+f(ae,1)+' = '+f(e1,1)+'.','Selling '+(sm<m?'below':'above')+' your own multiple pushes the multiple '+(sm<m?'up':'down')+'.'])};
+}
+
 var STREAK={
  'Accounting':[g3S],'Enterprise Value':[gEvents,gBridge,gTSM],'DCF':[gUFCF,gGordon,gPV],'WACC':[gWACC],
- 'Comps':[gComps],'M&A':[gAccretion,gPremium,gSyn],'LBO':[gLBO,gLBOexit],'Debt':[gDebt],'Healthcare':[gHC]
+ 'Comps':[gComps,gSale],'M&A':[gAccretion,gPremium,gSyn],'LBO':[gLBO,gLBOexit],'Debt':[gDebt],'Healthcare':[gHC]
 };
 
 /* ---------- MENTAL GENERATORS (easy numbers) ---------- */
@@ -191,6 +199,7 @@ var M=[
  function(){var pk=pick([500,1000,2000]),p=pick([0.1,0.2,0.25,0.5]);return {q:'$'+pk+'M peak sales, '+pc(p,0)+' chance of approval. Risk-adjusted peak sales?',a:A('$'+f(pk*p,0)+'M.')};},
  function(){var r=pick([6,8,9,12,18,24]);return {q:'Rule of 72: years to double at '+r+'%?',a:A(f(72/r,1)+' years.',['72 / '+r+'.'])};},
  function(){var e=pick([20,40,50,100]),m=pick([5,6,8,10,12]),d=pick([50,100,150,200]);if(e*m<=d)d=50;return {q:'EBITDA '+e+' at '+m+'x, net debt '+d+'. Equity value?',a:A(String(e*m-d)+'.',['EV '+(e*m)+' - '+d+'.'])};},
+ function(){var n=pick([2,3,4,5,6,8,10]),c=pick([4,5,8,10]);return {q:'Property NOI $'+n+'M, cap rate '+c+'%. Value?',a:A('$'+f(n/(c/100),1)+'M.',[n+' / '+c+'%.'])};},
  function(){var r=pick([100,200,500]),g=pick([10,20,50]);var m=pick([20,25,40]);return {q:'Revenue '+r+' grows '+g+'%, margin '+m+'% flat. New EBITDA?',a:A(f(r*(1+g/100)*m/100)+'.',['Revenue '+f(r*(1+g/100))+' x '+m+'%.'])};}
 ];
 function mental(){var g=pick(M)();g.topic='Mental';return g;}

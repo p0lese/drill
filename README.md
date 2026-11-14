@@ -16,9 +16,9 @@ Offline banking technicals practice. Installable web app for iPhone. Progress st
 - app.js, styles.css, index.html: the app. sw.js / cards.js are generated.
 
 ## Add or edit cards
-1. Edit any file in data/ (or add one). New topic names appear automatically.
-2. Run: node build.js   (checks every card: format, duplicates, difficulty, no dashes)
-3. Upload the folder to your host. The phone updates itself on the next open (open once online, then reopen).
+1. Edit any file in data/ on github.com (pencil icon, works from your phone) or add a new file there. New topic names appear automatically.
+2. Commit. A GitHub Action runs build.js (validates every card) and redeploys the site in about a minute. If a card is malformed, the Action fails and the live app stays as it was: check the Actions tab.
+3. Open the app while online. It picks up the new version and reloads; your progress and any session in progress are kept.
 Progress is keyed to topic + question text: edit answers freely; rewording a question makes it a new card.
 
 ## Install on iPhone

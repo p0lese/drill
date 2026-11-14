@@ -1,4 +1,4 @@
-window.DRILL_BUILD="2026-11-13-506e97";
+window.DRILL_BUILD="2026-11-13-446a11";
 // ---- core.js
 // C(topic, difficulty 1-4, question, answer, hint?)
 // Answer format: first line = the direct answer. Then lines starting with "- " = short reasoning bullets.
@@ -73,6 +73,63 @@ C(T,4,"A streaming company buys a 5-year license for $200M, funded 75% debt at 1
 C(T,2,"Inventory is written down by $10. Tax rate 25%, deductible. Walk it through.","Net income -7.5, cash +2.5.\n- COGS or a charge of 10, tax saving 2.5.\n- CFS: add back the non-cash 10.\n- BS: inventory -10, cash +2.5; retained earnings -7.5.");
 C(T,3,"A company records $100 of revenue on credit, then the customer never pays. Ignore tax. What happens?","Revenue and AR go up, then a bad debt expense wipes it out.\n- Net income ends at 0 (100 revenue, 100 bad debt).\n- No cash ever comes in; AR ends at 0.");
 C(T,2,"Why does a fast-growing, profitable company often burn cash?","Growth soaks up cash before it comes back.\n- Inventory and receivables build ahead of sales.\n- Capex for capacity comes before the revenue it supports.");
+
+})();
+
+// ---- basics.js
+;(function(){
+var T="Finance Basics";
+C(T,1,"Explain the time value of money. Is it just about inflation?","Money today is worth more than the same amount later, and not only because of inflation.\n- You could invest it today and earn a return (opportunity cost).\n- Future money is uncertain.\n- Inflation is one part, but even with zero inflation the opportunity cost remains.");
+C(T,1,"What does the discount rate represent?","The return you could expect from other investments of similar risk.\n- It is your opportunity cost.\n- Riskier cash flows get a higher rate.");
+C(T,2,"If a company can earn higher returns, why does it have a higher discount rate rather than a lower one?","Because higher potential returns come with more risk.\n- Investors demand more to compensate for the chance of a bad outcome.\n- The discount rate is about what investors require, not what the company hopes to earn.");
+C(T,1,"How much would you pay for $100 of cash flow every year forever if your discount rate is 10%?","$1,000.\n- Perpetuity value = cash flow / discount rate.\n- 100 / 10%.");
+C(T,2,"$100 a year forever, growing 3% a year, discount rate 10%. What is it worth?","About $1,429 if the first $100 arrives in a year.\n- 100 / (10% - 3%).");
+C(T,1,"What is the difference between present value and net present value?","PV is the value today of future cash flows; NPV subtracts what you pay for them.\n- NPV = PV - upfront cost.\n- Positive NPV means the investment beats your required return.");
+C(T,2,"What makes present value go up or down?","Size, timing and discount rate.\n- Bigger cash flows: higher PV.\n- Cash flows arriving sooner: higher PV.\n- Higher discount rate: lower PV.");
+C(T,2,"What is IRR and how do you calculate it?","The discount rate that sets NPV to zero.\n- Solve for r where PV of cash flows = upfront investment.\n- Done by trial and error or Excel's IRR function.");
+C(T,2,"What affects IRR, and how is that different from what affects PV?","IRR depends only on the cash flows and the price paid, not on a discount rate.\n- Higher price: lower IRR.\n- Bigger or earlier cash flows: higher IRR.\n- PV also moves with the chosen discount rate.");
+C(T,2,"How do you use IRR, discount rate and PV together to decide on an investment?","Invest if IRR beats the discount rate, equivalently if NPV is positive.\n- Or: invest if the price is below the PV of the cash flows.\n- All three say the same thing when applied consistently.");
+C(T,2,"How do you calculate ROIC, and what does it tell you?","NOPAT / invested capital.\n- Invested capital is roughly equity + debt - excess cash, or net operating assets.\n- Shows how much profit each dollar in the business earns; compare to WACC.");
+C(T,3,"What are the pros and cons of ROE, ROA and ROIC?","Each fits a different question.\n- ROE: shareholder return, but boosted by leverage.\n- ROA: asset efficiency, but mixes in financing (uses net income) and suits banks.\n- ROIC: capital-structure neutral, best for operating companies, but invested capital is harder to define.");
+C(T,2,"A company has ROIC of 15% and WACC of 9%. What does that mean?","It creates value.\n- Each dollar invested earns more than its cost of capital.\n- Growth adds value; with ROIC below WACC, growth would destroy value.");
+C(T,2,"How might a UK or German company's statements differ from a US company's?","IFRS versus US GAAP.\n- Statement order and names differ (e.g., 'turnover', BS listed in reverse liquidity order).\n- IFRS: interest paid can be operating or financing; all leases are finance-style on the IS.\n- Development costs can be capitalized under IFRS.");
+C(T,2,"How do you decide whether a revenue or expense belongs on the income statement?","It must relate to the current period's business and affect taxable income or net income.\n- Revenue when earned; expenses matched to that revenue or period.\n- Capex, debt repayment, dividends and buybacks stay off the IS.");
+C(T,2,"Why is accounts receivable an asset but deferred revenue a liability?","AR is money owed to you; deferred revenue is service you owe customers.\n- AR will turn into cash.\n- Deferred revenue must be delivered before it becomes revenue.");
+C(T,2,"What is free cash flow and what does it mean?","Cash from operations minus capex.\n- What the business generates after reinvesting to sustain and grow.\n- Available for debt repayment, dividends, buybacks or acquisitions.");
+C(T,2,"What does the change in working capital tell you?","Whether the business needs more or less cash to operate as it grows.\n- Increase in working capital: cash tied up, reduces FCF.\n- Decrease: cash released, increases FCF.");
+C(T,2,"Your firm bought a company for $1,000, creating $400 of goodwill and $200 of other intangibles. How do they affect the statements later?","Intangibles amortize; goodwill does not.\n- Other intangibles: amortized over their useful life, a non-cash expense added back on the CFS.\n- Goodwill: stays unless impaired; an impairment is a non-cash hit to net income.\n- Amortization of acquired intangibles is often not tax deductible in a stock deal.");
+C(T,2,"What are the main ways to fund a company externally, and how do they hit the statements?","Debt or equity.\n- Debt: cash and debt up; interest hits the IS; principal repayment does not.\n- Equity: cash and equity up; no IS impact, but dilution.\n- Preferred: senior to common, dividends below net income.");
+C(T,3,"What is the difference between economic profit and accounting profit?","Economic profit subtracts the cost of all capital, including equity.\n- Economic profit = (ROIC - WACC) x invested capital.\n- A company can report accounting profit while destroying value.");
+C(T,2,"What is the difference between a nominal and real return?","Real return strips out inflation.\n- Real ≈ nominal - inflation.\n- 8% nominal with 3% inflation is about 5% real.");
+C(T,3,"Why might a project with a higher IRR have a lower NPV than another project?","Size and timing.\n- A small project can have a huge IRR but little absolute value.\n- IRR assumes reinvestment at the IRR; NPV is the better decision rule for mutually exclusive projects.");
+C(T,2,"What is a perpetuity versus an annuity?","Annuity: equal payments for a set number of periods. Perpetuity: payments forever.\n- Perpetuity PV = C / r.\n- Annuity PV = C x (1 - (1 + r)^-n) / r.");
+
+})();
+
+// ---- capmarkets.js
+;(function(){
+var T="Capital Markets";
+C(T,2,"Why might a company issue debt rather than equity?","Cheaper and no dilution.\n- Interest is tax deductible and lenders accept lower returns than shareholders.\n- Signals confidence in steady cash flows.\n- Downside: fixed payments and covenants raise risk.");
+C(T,3,"Walk me through a debt versus equity analysis for a financing recommendation.","Compare cost, capacity and impact.\n- Can the company support more debt? Check leverage, coverage and covenants under downside cases.\n- Compare EPS impact and cost of each option.\n- Weigh ownership dilution, flexibility and market conditions.");
+C(T,3,"How do you choose between term loans and subordinated notes?","Cost and flexibility versus restrictions.\n- Term loans: cheaper, secured, floating rate, prepayable, but covenants and amortization.\n- Sub notes: pricier, fixed rate, longer, fewer covenants, call protection.\n- Choose based on how much flexibility and how much leverage the company needs.");
+C(T,2,"What could cause a company's credit rating to change?","Changes in its ability to repay.\n- Leverage and coverage moving, big debt-funded deals, shareholder payouts.\n- Industry or macro shifts, litigation, loss of key customers.");
+C(T,2,"What is the difference between coupon rate, current yield and yield to maturity?","Three ways to express a bond's return.\n- Coupon: annual interest / face value.\n- Current yield: annual interest / price.\n- YTM: total return if held to maturity, including the price gain or loss.");
+C(T,2,"How do you value a bond?","Discount its coupons and principal at the market yield.\n- Price = PV of coupons + PV of face value.\n- Yield above coupon means price below par.");
+C(T,3,"Which is more sensitive to rate changes: a 10% coupon bond or a 5% coupon bond of the same maturity?","The 5% coupon bond.\n- More of its value sits in the final principal payment.\n- Longer duration means more price sensitivity.");
+C(T,3,"What do duration and convexity mean intuitively?","Duration is the first-order sensitivity to rates; convexity is how that sensitivity changes.\n- Duration ≈ % price change per 1% move in yield.\n- Positive convexity means prices rise more when yields fall than they drop when yields rise.");
+C(T,3,"What is yield to worst?","The lowest yield you could get if the issuer calls the bond at the worst time for you.\n- Lower of YTM and every yield-to-call.\n- Matters for callable bonds trading above par.");
+C(T,2,"What stats matter in a comparable debt issuance analysis?","Pricing and terms of similar recent deals.\n- Yield, spread, coupon, maturity, rating, seniority.\n- Leverage at issuance, covenants, call protection.");
+C(T,2,"Walk me through an IPO valuation.","Value on comps, then apply a discount.\n- Use forward multiples of peers to get an implied valuation.\n- Apply an IPO discount (often 10 to 20%) so the deal trades up.\n- Set a price range and share count from the target raise.");
+C(T,2,"What are primary versus secondary shares in an offering?","New shares versus existing shares.\n- Primary: the company issues new shares, raising cash for itself.\n- Secondary: existing holders sell; the company gets nothing.\n- Only primary shares dilute.");
+C(T,2,"What is a greenshoe or overallotment option?","Lets underwriters sell up to 15% more shares than planned.\n- Used to stabilize the price after the IPO.\n- If the price rises, they exercise it; if it falls, they buy shares back in the market.");
+C(T,2,"How is a follow-on offering modeled differently from an IPO?","There is already a market price.\n- Price is set at a small discount to the current stock price.\n- Focus is on dilution, EPS impact and use of proceeds.");
+C(T,2,"How does a SPAC take a company public?","A listed cash shell merges with a private company.\n- The SPAC raises money in its own IPO, then finds a target.\n- Shareholders vote; many redeem; often a PIPE backs the deal.");
+C(T,3,"What are the trade-offs of a SPAC versus a traditional IPO?","Speed and certainty versus cost.\n- SPAC: negotiated price, projections allowed, faster.\n- But sponsor promote dilution, redemptions and warrants make it expensive.\n- IPO: cleaner, cheaper long term, but market timing risk.");
+C(T,3,"Why is a convertible bond not necessarily cheaper than normal debt?","The low coupon is paid for with an equity option.\n- You give investors upside through conversion.\n- If the stock rises, dilution can cost more than higher interest would have.");
+C(T,2,"What is a block trade?","A large sale of shares by an existing holder, usually overnight through a bank.\n- Priced at a discount to the last close.\n- The bank may buy the block outright and take the risk.");
+C(T,2,"What is an at-the-market (ATM) offering?","Selling new shares gradually into the market at prevailing prices.\n- Cheap and flexible; common for biotechs and REITs.");
+C(T,2,"What is a PIPE?","Private investment in public equity.\n- Investors buy shares directly from a public company, usually at a discount.\n- Fast way to raise capital without a marketed offering.");
+C(T,3,"Why do IPOs tend to pop on day one?","They are priced at a discount on purpose.\n- Compensates investors for risk and information gaps.\n- Builds demand and goodwill for the aftermarket.");
 
 })();
 
@@ -302,6 +359,63 @@ C(T,2,"A company buys back stock. Does EV/EBITDA change? Does P/E?","EV/EBITDA i
 
 })();
 
+// ---- harder.js
+;(function(){
+// Harder and calculation cards across core topics (inspired by the topics in the 400 Questions guide, written fresh).
+C("Accounting",3,"A customer orders and receives a $100 product (cost $50) but has not paid. Tax 25%, taxes paid now. Walk it through, then walk through the payment.","Net income +37.5, cash -12.5 at first; cash +100 when paid.\n- IS: revenue 100, COGS 50, tax 12.5, NI 37.5.\n- CFS: NI 37.5, AR -100, inventory +50, so cash -12.5 (the tax).\n- Payment later: cash +100, AR -100, no IS impact.");
+C("Accounting",3,"A company buys a $200 factory with $200 of debt. A year later it pays 10% interest, depreciates 10% of the factory and repays 5% of principal. Tax 25%. Walk through year 1.","Net income -30, cash -20.\n- IS: interest 20 + depreciation 20 = -40 pretax, tax +10, NI -30.\n- CFS: -30 + 20 depreciation = -10; financing -10 repayment.\n- BS: cash -20, PP&E 180 (assets +160); debt 190, retained earnings -30.");
+C("Accounting",3,"$100 of debt carries 10% interest and 20% annual principal repayment. Tax 25%. What happens in year 1?","Net income -7.5, cash -27.5.\n- Interest 10, tax saving 2.5.\n- Principal repayment of 20 is financing, not an expense.\n- BS: cash -27.5; debt -20, retained earnings -7.5.");
+C("Accounting",3,"A company books a $100 restructuring charge: $60 paid in cash, $40 accrued. Tax 25%. Walk it through.","Net income -75, cash -35.\n- Pretax -100, tax benefit 25.\n- CFS: NI -75 + accrued liability +40 = -35.\n- BS: cash -35; accrued liabilities +40, retained earnings -75.");
+C("Enterprise Value",3,"A company issues $120 of debt and $80 of stock, then buys $160 of PP&E and $40 of short-term investments. What happens to EV and equity value?","EV +160, equity value +80.\n- Cash in 200 and out 200, so cash is flat.\n- Debt +120, investments +40 are subtracted as non-operating.\n- 80 + 120 - 40 = +160, matching the operating assets bought.");
+C("Enterprise Value",3,"A company issues $100 of common and $100 of preferred and keeps the cash. EV and equity value?","EV unchanged, equity value +100.\n- Preferred +100 and common +100 are offset by cash +200 in the bridge.");
+C("Enterprise Value",3,"A company buys $100 of inventory with cash. What happens to EV and equity value?","EV +100, equity value unchanged.\n- Cash, a non-operating asset, becomes inventory, an operating asset.\n- Net debt rises 100 with no change to equity.");
+C("Enterprise Value",3,"A company issues $200 of stock and uses $100 to buy another business. What happens?","Equity value +200, EV +100.\n- Cash up 100 net (200 in, 100 out).\n- The new business adds 100 of operating value.");
+C("Enterprise Value",3,"Same company uses the $100 to buy a piece of equipment instead of a business. Any difference?","No difference to EV: still +100.\n- Equipment is an operating asset like the business.\n- If it bought a financial investment instead, EV would be unchanged.");
+C("Enterprise Value",3,"300 shares at $12 and 60 options at a $9 strike. Diluted equity value?","$3,780.\n- Proceeds 60 x 9 = 540 buy back 45 shares.\n- Net new shares 15; 315 x 12 = 3,780.");
+C("Enterprise Value",3,"Give examples of actions that change equity value but not EV, EV but not equity value, and both.","Equity only: issuing stock, buybacks, dividends. EV only: spending cash on operating assets. Both: stock-funded acquisitions, market price moves.\n- Equity-only actions swap cash for shares.\n- EV-only actions turn cash into operations.");
+C("Enterprise Value",2,"What is current versus implied enterprise value?","Current uses the market price; implied uses your valuation.\n- Current: what the market says it is worth.\n- Implied: what your DCF or comps say it should be worth.");
+C("Enterprise Value",2,"Give a real-life analogy for equity value versus enterprise value.","A house with a mortgage.\n- Enterprise value is the house's price.\n- Equity value is the homeowner's slice after the mortgage, plus any cash kept in the house.");
+C("Comps",3,"A company trades at 10x EBITDA and sells an operating asset for 2x the asset's EBITDA. What happens to its EV/EBITDA?","It goes up.\n- Example: EV 1,000, EBITDA 100. Sell 10 of EBITDA for 20 of cash.\n- EV falls to 980, EBITDA to 90: 10.9x.\n- Selling below your own multiple raises the multiple.");
+C("Comps",3,"Which should be worth more: a $500M EBITDA healthcare company or a $500M EBITDA industrials company?","Usually the healthcare company.\n- Typically faster, steadier growth, higher margins and lower capex.\n- But it depends on the specifics: a growing industrials niche can beat a declining healthcare business.");
+C("Comps",3,"A manufacturer trades at 15x EBITDA while comps sit at 8x. What could explain it?","Something special or something wrong.\n- Much faster growth, better margins or returns.\n- Takeover speculation, or EBITDA temporarily depressed.\n- Or the market is overvaluing it.");
+C("Comps",3,"For forward multiples, do you use today's EV or a projected EV?","Today's EV.\n- The market prices future earnings today.\n- Forward EBITDA in the denominator, current EV on top.");
+C("Comps",2,"Why look at both historical and projected metrics?","History is reliable; projections show where the market is pricing.\n- LTM shows what actually happened.\n- Forward metrics matter more for growing or changing companies.");
+C("Comps",3,"Your target's multiples sit above the comps' medians. What does that mean?","Either it deserves a premium or it is expensive.\n- Check whether growth, margins and returns justify the gap.\n- If not, the comps suggest a lower implied value.");
+C("Comps",2,"When is a liquidation valuation useful?","For distressed companies or asset-heavy businesses.\n- Sets a floor based on what assets would fetch.\n- Not useful for healthy companies, where going-concern value is far higher.");
+C("Comps",3,"Building global logistics comps across the US, Europe and Asia: what is the main challenge?","Consistency.\n- Different accounting (IFRS vs GAAP leases), fiscal years, currencies.\n- Different growth and risk across regions, which moves multiples.");
+C("DCF",3,"Will an unlevered and a levered DCF give the same value?","In theory yes, in practice rarely.\n- They need perfectly consistent capital structure and discount rates.\n- Changing leverage over time breaks the match.");
+C("DCF",3,"Why does UFCF include the change in working capital but not interest?","UFCF captures operating cash needs, not financing.\n- Working capital is part of running the business.\n- Interest goes to lenders, who are covered by WACC.");
+C("DCF",3,"How do expenses in your FCF connect to the EV-to-equity bridge?","Treat each item once, consistently.\n- If you subtract lease costs in FCF, do not add lease liabilities in the bridge.\n- If you count NCI's share of cash flows, add NCI in the bridge.");
+C("DCF",3,"Does a negative terminal growth rate ever make sense?","Yes.\n- Declining industries or assets that wear out, like drugs after LOE or depleting resources.");
+C("DCF",3,"What is a stub period in a DCF?","A partial first period when the valuation date is mid-year.\n- Count only the remaining cash flows for that year.\n- Adjust discount periods to match.");
+C("DCF",3,"A company goes from 0% to 20% debt. What happens to WACC and DCF value?","WACC falls, value rises.\n- Cheaper, tax-deductible debt replaces equity.\n- Cost of equity rises a bit, but not enough to offset at 20%.");
+C("DCF",3,"The central bank raises short rates from 2% to 5%. What happens to WACC and your DCF?","WACC up, value down.\n- Risk-free and borrowing rates rise.\n- The effect depends on how much long-term rates move with short rates.");
+C("DCF",3,"Which matters more: cutting revenue growth from 10% to 5%, or WACC from 10% to 9%?","Usually the growth cut.\n- Halving growth compounds through every forecast year and the terminal base.\n- A 1-point WACC change moves value roughly 10 to 15%. Check with a sensitivity.");
+C("DCF",3,"Your VP asks you to extend a 10-year DCF to 20 years. What changes?","Terminal value shrinks as a share of value.\n- Value rises if extra-year growth exceeds terminal growth, falls if below.\n- Forecasts that far out are less reliable.");
+C("DCF",3,"Two identical companies, one in an emerging market and one in a developed market. How do their DCFs differ?","The emerging market company is worth less.\n- Higher risk-free rate and country risk premium raise WACC.\n- Possibly higher inflation and currency risk.");
+C("DCF",3,"What warning signs suggest your DCF assumptions are off?","Results the real world would not support.\n- Terminal value over about 85% of value.\n- Implied exit multiple far from comps; terminal growth above GDP.\n- Margins expanding forever, capex below D&A long term.");
+C("WACC",3,"What risk-free rate do you use for a company operating in the US, EU and UK?","The rate of the currency your cash flows are in.\n- US dollar cash flows: US Treasuries.\n- Match currency, not where the company operates.");
+C("WACC",3,"How do you get the equity risk premium for a company operating in many countries?","Weight country ERPs by where it earns revenue.\n- Add country risk premiums for riskier markets.");
+C("WACC",2,"Why is equity more expensive than debt?","Shareholders take more risk.\n- They are paid last and have no fixed return.\n- Debt is senior, has fixed payments and its interest is deductible.");
+C("WACC",2,"How do you calculate cost of preferred stock?","Annual preferred dividend / preferred price.\n- No tax adjustment since dividends are not deductible.");
+C("M&A",2,"How is the purchase price set in an M&A deal?","Valuation plus negotiation.\n- Public targets: premium to the unaffected price, cross-checked with DCF, comps, precedents.\n- Final price depends on bidders, synergies and the seller's alternatives.");
+C("M&A",3,"What is the true price of an M&A deal: purchase equity value or purchase EV?","Purchase EV.\n- The buyer also takes on the target's debt and gets its cash.\n- EV reflects the full cost of the business.");
+C("M&A",3,"How does a cash-free, debt-free deal for a private target differ from a public deal?","The buyer pays for EV only.\n- The seller keeps cash and repays debt.\n- A working capital target adjusts the price at closing.");
+C("M&A",3,"Why do merger models often overstate synergies?","Timing, cost and execution.\n- Synergies phase in slowly and integration costs come first.\n- Revenue synergies often never arrive, and some customers leave.");
+C("M&A",4,"Buyer: NI $100, 50 shares, $30 price. Target: NI $20, bought for $300. Tax 25%. EPS impact of all cash at 4%, all debt at 10%, all stock?","Cash: accretive, $2.22. Debt: dilutive, $1.95. Stock: neutral, $2.00.\n- Cash cost 300 x 4% x 0.75 = 9, NI 111 on 50 shares.\n- Debt cost 300 x 10% x 0.75 = 22.5, NI 97.5.\n- Stock: 10 new shares, NI 120 on 60 shares.");
+C("M&A",4,"Same deal, but 50% cash and 50% stock. EPS?","$2.10, accretive.\n- Cash half: 150 x 4% x 0.75 = 4.5 cost.\n- Stock half: 5 new shares.\n- NI 115.5 on 55 shares.");
+C("M&A",3,"Will the combined P/E always sit between the buyer's and the target's purchase P/E?","Only in an all-stock deal.\n- Cash and debt add interest costs that are not in either company's P/E.\n- So the combined multiple can fall outside the range.");
+C("M&A",3,"When is EPS accretion or dilution not the main test?","Private buyers, very large strategic deals, or loss-making targets.\n- Better tests: ROIC versus WACC, IRR, value creation, contribution analysis.");
+C("M&A",3,"How does a buyer decide the mix of cash, debt and stock?","Cost and capacity.\n- Use cash first if it has excess.\n- Debt up to a comfortable leverage level.\n- Stock when its P/E is high or the deal is too big for debt.");
+C("LBO",3,"Would you rather have a high IRR or a high MoM in an LBO?","Depends on the fund and the hold.\n- IRR rewards speed; MoM rewards absolute gains.\n- A quick 1.5x can show a big IRR but little money made. LPs look at both.");
+C("LBO",3,"Why do you need both FCF and EBITDA in an LBO?","EBITDA sets value and leverage; FCF pays down debt.\n- Lenders and buyers price off EBITDA.\n- Debt is repaid with cash after interest, taxes, capex and working capital.");
+C("LBO",2,"What exit strategies does a sponsor have, and which is preferred?","Strategic sale, sale to another sponsor, IPO.\n- A strategic sale usually gives the cleanest, highest price.\n- An IPO exits gradually.");
+C("LBO",3,"How do you pick the purchase and exit multiples?","From comps and precedents.\n- Base case often assumes exit multiple = entry multiple.\n- Show sensitivities, since assuming expansion is aggressive.");
+C("LBO",4,"Buy $100 EBITDA at 10x with 60% debt at 8%. D&A 20, capex 20, no working capital, tax 25%. EBITDA flat for 5 years, all FCF repays debt, exit at 10x. Rough returns?","About 1.3x and 5% IRR.\n- Interest 48, EBT 32, NI 24; FCF = 24 + 20 - 20 = 24 a year.\n- Repay about 120 over 5 years, so debt falls to about 480.\n- Equity out about 520 versus 400 in. Flat EBITDA makes a poor LBO.");
+C("LBO",3,"How does a company's free cash flow relate to how much debt it can repay?","Directly.\n- FCF after interest is what is available for principal.\n- Higher leverage means more interest, which reduces FCF available for paydown.");
+
+})();
+
 // ---- healthcare.js
 ;(function(){
 var T="Healthcare";
@@ -356,6 +470,66 @@ C(T,3,"What is rNPV in one sentence, and how do you build it?","NPV where each y
 C(T,3,"First-in-class versus best-in-class: how does it affect your model?","Timing versus share.\n- First-in-class: earlier launch, but share may be taken later.\n- Best-in-class: later launch, can win share with better data or convenience.");
 C(T,3,"What drives how many sales reps you can cut in a pharma merger?","Overlap.\n- Overlapping prescribers and therapeutic areas.\n- Launches that still need coverage, and contract terms.");
 C(T,3,"If an associate disagrees with your LOE assumption, how do you align before presenting?","Get to the evidence.\n- Walk through patent dates, exclusivity, litigation and analog erosion curves.\n- Show the sensitivity, agree a base case, flag the alternative.");
+
+})();
+
+// ---- industries.js
+;(function(){
+var T="Industries";
+C(T,2,"How are commercial banks different from normal companies?","Debt is their raw material, not financing.\n- They earn a spread between loan yields and deposit costs.\n- No EV or EBITDA: value equity directly with P/E, P/BV, P/TBV and DDMs.\n- Capital rules limit how much they can lend and pay out.");
+C(T,2,"How are insurance companies different?","They collect premiums upfront and pay claims later.\n- Profit from underwriting and investing the float.\n- Key liabilities are reserves for future claims.\n- Valued on P/BV, P/E, ROE, and for life insurers embedded value.");
+C(T,2,"What is regulatory capital and why do banks need it?","An equity cushion required by regulators.\n- Absorbs losses so depositors are protected.\n- Limits leverage, growth and dividends.");
+C(T,3,"What is CET1 and why does it matter?","Common Equity Tier 1: the highest-quality bank capital, mostly common equity and retained earnings less intangibles.\n- CET1 ratio = CET1 / risk-weighted assets.\n- Below the minimum, a bank must stop payouts or raise capital.");
+C(T,3,"What is the combined ratio for an insurer?","Loss ratio + expense ratio.\n- Below 100% means underwriting profit.\n- Above 100% means losses on underwriting, which investment income must cover.");
+C(T,3,"Walk me through a DDM for a bank.","Project net income and the capital needed to stay at a target CET1 ratio.\n- Dividends = net income minus capital retained for growth.\n- Discount dividends and a terminal value at the cost of equity to get equity value.");
+C(T,3,"How do you forecast a bank's financial statements?","Start from the balance sheet.\n- Forecast loans and deposits, then interest income and expense from yields and costs.\n- Add fee income, opex and loan loss provisions.\n- Check capital ratios each year.");
+C(T,3,"What are the LCR and NSFR for banks?","Liquidity rules.\n- LCR: high-quality liquid assets / 30-day stressed outflows, at least 100%.\n- NSFR: stable funding / required stable funding over a year, at least 100%.");
+C(T,3,"How do P&C and life insurers compare?","Short-tail versus long-tail liabilities.\n- P&C: one-year policies, combined ratio matters, catastrophe risk.\n- Life: decades-long liabilities, spread on invested assets, valued on embedded value.");
+C(T,3,"How does a merger model differ for banks?","Focus on capital, not just EPS.\n- Fair value marks on loans and deposits, core deposit intangibles.\n- Tangible book value dilution and earn-back period.\n- Pro forma capital ratios.");
+C(T,2,"What is NOI for a property and why does it matter?","Net operating income: rental revenue minus property operating expenses.\n- Excludes debt service, D&A and capex.\n- It drives property value through the cap rate.");
+C(T,2,"What is a cap rate and how do you use it?","NOI / property value.\n- Value = NOI / cap rate.\n- Lower cap rates mean higher prices and lower perceived risk.");
+C(T,2,"A building has $5M of NOI and similar buildings trade at a 5% cap rate. What is it worth?","$100M.\n- 5 / 5%.");
+C(T,3,"Why can property deals use 60 to 70% leverage when LBOs use less?","Real estate cash flows are stable and collateral is tangible.\n- Long leases and resaleable buildings give lenders comfort.");
+C(T,3,"What is a distribution waterfall in real estate?","How cash is split between investors and the sponsor.\n- LPs get capital back plus a preferred return first.\n- Then a catch-up, then a split that gives the sponsor promote above hurdles.");
+C(T,2,"How do REITs work and what are their key rules?","Companies that own income-producing real estate and avoid corporate tax.\n- Must pay out at least 90% of taxable income as dividends.\n- Most assets and income must come from real estate.");
+C(T,2,"What is FFO and why do REITs use it?","Funds from operations: net income + real estate depreciation - gains on property sales.\n- Depreciation on buildings overstates economic decline.\n- AFFO also subtracts recurring capex and straight-line rent adjustments.");
+C(T,3,"How do you value an equity REIT?","P/FFO and P/AFFO multiples, NAV and dividend models.\n- NAV: value properties at market cap rates, subtract debt.\n- Compare price to NAV for premium or discount.");
+C(T,3,"Why do REITs issue equity so often?","They pay out most of their income, so they cannot retain cash to grow.\n- New acquisitions are funded with new equity and debt.");
+C(T,2,"What are the main oil and gas segments and how is valuation different?","Upstream, midstream, downstream.\n- Upstream (E&P): NAV of reserves, EV/EBITDAX, EV per flowing barrel.\n- Midstream (pipelines): stable fee-based cash, EV/EBITDA, yield.\n- Downstream (refining): margins and capacity, EV/EBITDA through the cycle.");
+C(T,3,"Walk me through a NAV model for an E&P company.","Value each reserve category by its production and cash flows until depleted.\n- Forecast production decline, prices, costs, taxes.\n- Discount at about 10% (PV-10), sum, subtract net debt.\n- No terminal value: reserves run out.");
+C(T,3,"Successful efforts versus full cost accounting: what is the difference?","How exploration costs are treated.\n- Successful efforts: dry-hole costs expensed.\n- Full cost: all exploration costs capitalized.\n- Use EBITDAX to compare across both.");
+C(T,2,"A gas company has 10 Bcfe of proved reserves and produces 0.5 Bcfe a year. What is the reserve life?","20 years.\n- Reserve life (R/P) = reserves / annual production.");
+C(T,3,"How does the MLP structure affect midstream valuation?","No entity-level tax and high distributions.\n- Valued on distribution yield and distributable cash flow.\n- The GP's incentive distribution rights take a growing cut.");
+C(T,2,"What are the main mining segments and how do they differ in valuation?","Precious metals, base metals, bulk commodities.\n- Single-asset miners: NAV-based (P/NAV).\n- Diversified majors: EV/EBITDA and P/E.\n- Commodity price assumptions drive everything.");
+C(T,3,"Walk me through a NAV model for a gold miner.","Model each mine's production and costs over its life.\n- Use a long-term gold price, all-in sustaining costs, taxes, closure costs.\n- Discount (often 5%) and sum; subtract net debt.\n- Compare to share price as P/NAV.");
+C(T,2,"What is the difference between reserves and resources in mining?","Reserves are economically mineable; resources are just identified.\n- Resources: measured, indicated, inferred by confidence.\n- Reserves: proven and probable after economic studies.");
+C(T,2,"What are the main power and utilities segments?","Regulated utilities, independent power producers, renewables.\n- Regulated: allowed returns on rate base, valued on P/E, EV/rate base.\n- IPPs: merchant power prices, more volatile, lower multiples.");
+C(T,3,"How is a regulated utility's revenue set?","Regulators allow a return on its rate base plus cost recovery.\n- Revenue requirement = opex + D&A + taxes + allowed return x rate base.\n- Growth comes from growing the rate base through capex.");
+C(T,3,"Would an IPP trade at higher or lower multiples than a regulated distribution utility?","Lower.\n- IPP cash flows depend on volatile power prices.\n- Regulated utilities have predictable, protected returns.");
+C(T,2,"What are the main TMT segments and how does valuation differ?","Software, internet, hardware/semis, media, telecom.\n- Software: EV/revenue, EV/ARR, Rule of 40.\n- Semis: cyclical EV/EBITDA and P/E.\n- Telecom: capital-heavy, EV/EBITDA, FCF yield.");
+C(T,3,"How do you value an unprofitable tech startup?","Project out to profitability and use forward multiples.\n- DCF with a long forecast and high discount rate.\n- EV/forward revenue or EV/gross profit versus growth.\n- Unit economics: LTV/CAC, payback, retention.");
+C(T,3,"A SaaS company claims LTV/CAC of 4x but a 24-month CAC payback. What do you conclude?","The LTV is probably flattered.\n- A long payback means slow cash recovery; LTV relies on optimistic lifetime and retention assumptions.\n- Check churn, gross margin, and discounting.");
+C(T,2,"What are the main consumer and retail verticals?","Staples, discretionary, restaurants, retail, e-commerce.\n- Staples: stable, higher multiples.\n- Discretionary and retail: cyclical, lower multiples.\n- Key metrics: same-store sales, margins, inventory turns.");
+C(T,2,"Would a franchise restaurant chain or one that owns its stores trade at higher multiples?","Franchise.\n- Asset-light, royalty-based revenue with high margins and less capex.\n- Owned-store chains carry more operating risk.");
+C(T,2,"What is four-wall EBITDA?","Store-level profit before corporate overhead.\n- Store revenue minus store costs.\n- Shows unit economics of each location.");
+C(T,2,"What are the key drivers in a retailer's model?","Stores and productivity.\n- Store count, new openings, same-store sales growth.\n- Revenue per square foot, gross margin, inventory and rent.");
+C(T,2,"What makes industrials different from other groups?","Broad and cyclical.\n- Aerospace, defense, transport, machinery, building products.\n- Backlog and order book matter; capital intensity varies a lot.");
+C(T,3,"How would you forecast an airline's cash flows?","Capacity times yield.\n- Available seat miles, load factor, revenue per passenger mile.\n- Fuel and labor costs per seat mile.\n- Heavy aircraft capex and leases; use EBITDAR.");
+C(T,3,"How do long lead times affect modeling for aerospace manufacturers?","Revenue follows deliveries, while cash follows milestones.\n- Backlog drives the forecast.\n- Customer deposits and progress payments swing working capital.");
+C(T,2,"How does project finance differ from corporate finance?","Debt is repaid only from one asset's cash flows.\n- Non-recourse to the sponsor.\n- High leverage, debt sized to cash flows, strict covenants.");
+C(T,3,"What are DSCR and LLCR in project finance?","Debt coverage tests.\n- DSCR: cash flow available for debt service / debt service in a period.\n- LLCR: PV of cash flows over the loan life / debt outstanding.\n- Debt is sculpted so DSCR stays at a target each period.");
+C(T,3,"Why is project debt sculpted to cash flows?","So repayments match the asset's ability to pay.\n- Keeps DSCR constant and maximizes debt capacity.");
+C(T,3,"How are private companies different from public ones in a valuation?","Less information and less liquidity.\n- Normalize owner compensation and one-offs.\n- Add size and illiquidity discounts.\n- Use public comps and deals for multiples.");
+C(T,3,"How might you adjust a private company's financials?","Normalize to how a buyer would run it.\n- Remove owner perks and excess salaries.\n- Strip one-time items, related-party deals.\n- Adjust to GAAP if needed.");
+C(T,3,"What are LP-led versus GP-led secondaries?","Who is selling.\n- LP-led: investors sell their fund stakes to secondary buyers.\n- GP-led: the manager moves assets into a new vehicle, like a continuation fund.");
+C(T,3,"Why would a GP set up a continuation fund?","To keep owning a strong asset past the fund's life.\n- Existing LPs can cash out or roll.\n- GP resets its economics and gets more time to grow the asset.");
+C(T,3,"What do TVPI, DPI and RVPI mean for a PE fund?","Return multiples.\n- DPI: cash distributed / paid in.\n- RVPI: remaining value / paid in.\n- TVPI = DPI + RVPI.");
+C(T,2,"What are the main healthcare verticals and how does valuation differ?","Pharma, biotech, medtech, services, tools, payers.\n- Biotech: rNPV.\n- Pharma: P/E, EV/EBITDA, patent cliff adjustments.\n- Services and payers: EV/EBITDA, P/E; tools and medtech: growth-adjusted multiples.");
+C(T,3,"What drives a nursing home or healthcare facility's cash flows?","Beds, occupancy and payer mix.\n- Census times rate per patient day, by payer (Medicare, Medicaid, private).\n- Labor is the biggest cost; leases or owned property.");
+C(T,3,"How do you value a platform biotech with marketed drugs and a pipeline?","Sum of the parts.\n- Marketed drugs: DCF through LOE or multiples.\n- Pipeline: rNPV by asset.\n- Platform value only if it is proven to produce new assets.");
+C(T,3,"In which industrials verticals is a sum-of-the-parts most useful?","Conglomerates with distinct businesses.\n- Each segment has different growth and margins and its own peer group.\n- Least useful for single-product companies.");
+C(T,3,"Why might your VP prefer EV/NOPAT over EV/EBITDA for a steel producer?","Capital intensity.\n- D&A is a real cost for asset-heavy steelmakers.\n- NOPAT reflects that and taxes; EBITDA overstates earning power.");
+C(T,2,"What multiples are used for renewables companies?","Capacity and contracted cash flow metrics.\n- EV/MW, EV/EBITDA, cash yield.\n- Contracted life and PPA prices matter a lot.");
 
 })();
 
@@ -540,6 +714,27 @@ C(T,1,"EBITDA 100, interest 25. Interest coverage?","4x.");
 C(T,1,"A company with no debt adds debt. Cost of equity?","Up.\n- More financial risk for shareholders.");
 C(T,1,"Mid-year convention versus end-of-year: which gives a higher value?","Mid-year.\n- Cash flows are discounted for half a year less.");
 C(T,1,"A company switches from leasing to owning its stores. What happens to EBITDA?","Up, for operating leases.\n- Rent leaves opex; depreciation and interest replace it below EBITDA.");
+
+})();
+
+// ---- restructuring.js
+;(function(){
+var T="Restructuring";
+C(T,2,"What are the two sides of a restructuring deal?","Debtor side and creditor side.\n- Debtor: advise the company on options and a plan.\n- Creditor: advise a group of lenders or bondholders on maximizing recovery.");
+C(T,2,"How are stressed, distressed and bankrupt companies different?","Degrees of trouble.\n- Stressed: weak but meeting obligations; covenants at risk.\n- Distressed: likely to miss payments or breach covenants; debt trades well below par.\n- Bankrupt: has filed for court protection.");
+C(T,2,"What pushes a company from stressed to distressed?","Cash running out against fixed obligations.\n- Falling revenue or margins, a big maturity coming due.\n- Loss of key customers, rising rates on floating debt, market shocks.");
+C(T,3,"A distressed company has which main options? Pros and cons?","Fix it out of court or in court.\n- Refinance, amend and extend, asset sales, new equity: least disruptive but needs consent.\n- Distressed exchange: cuts debt, but may count as default.\n- Chapter 11: binding on holdouts, but costly and slow. Chapter 7: liquidation.");
+C(T,2,"What is the difference between Chapter 7 and Chapter 11?","Liquidate versus reorganize.\n- Chapter 7: a trustee sells assets and pays creditors.\n- Chapter 11: the company keeps operating and proposes a plan to restructure.");
+C(T,3,"What is a Section 363 sale?","Selling assets in bankruptcy, free and clear of liens and claims.\n- Fast way to sell a business or division.\n- Often uses a stalking-horse bidder to set a floor price.");
+C(T,3,"What is a 13-week cash flow model?","A weekly cash forecast for a distressed company.\n- Tracks receipts and disbursements to see when cash runs out.\n- Guides liquidity decisions and DIP sizing.");
+C(T,3,"How does valuation change for a distressed company?","Focus shifts to liquidity and recovery.\n- Use lower, normalized projections and a higher discount rate.\n- Liquidation value becomes a key floor.\n- Value the enterprise, then run it through the waterfall.");
+C(T,3,"Walk me through a liquidation valuation.","Estimate what each asset fetches in a sale, then pay claims in order.\n- Apply recovery rates: cash near 100%, receivables 70 to 90%, inventory 30 to 60%, PP&E lower.\n- Subtract wind-down costs.\n- Distribute proceeds down the capital structure.");
+C(T,2,"What is the absolute priority rule, and is it always followed?","Seniors paid in full before juniors get anything.\n- In practice, juniors sometimes get a small recovery to speed up consensus.");
+C(T,3,"What is a fulcrum security?","The most senior class that is only partly repaid.\n- It usually converts into the reorganized company's equity.");
+C(T,2,"What is an amend-and-extend?","Lenders agree to push out maturities, often for a higher rate or fees.\n- Buys time without a full restructuring.");
+C(T,3,"What is a prepackaged bankruptcy?","A plan agreed with creditors before filing.\n- Much faster and cheaper than a free-fall Chapter 11.");
+C(T,3,"What is cancellation of debt income?","Debt forgiven is treated as taxable income.\n- Bankruptcy exceptions exist, but NOLs and tax attributes may shrink.");
+C(T,3,"What is a creditor-on-creditor violence or liability management exercise?","A deal where some lenders improve their position at others' expense.\n- Examples: uptiering, drop-downs of assets to unrestricted subsidiaries.\n- Exploits loose documentation.");
 
 })();
 
