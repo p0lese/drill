@@ -16,7 +16,7 @@ var TOPICS=TOPIC_ORDER.filter(function(t){return CARDS.some(function(c){return c
 CARDS.forEach(function(c){if(TOPICS.indexOf(c.topic)<0)TOPICS.push(c.topic);});
 
 /* storage */
-function fresh(){return {v:2,cards:{},days:{},streak:{best:{},cleared:0,runs:[]},set:{theme:'auto',per:20},resume:null,last:null};}
+function fresh(){return {v:2,cards:{},days:{},streak:{best:{},cleared:0,runs:[]},set:{theme:'auto',per:20,hard:false},resume:null,last:null};}
 function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r),f=fresh();for(var k in f)if(o[k]==null)o[k]=f[k];for(var k2 in f.set)if(o.set[k2]==null)o.set[k2]=f.set[k2];if(!o.streak.best)o.streak.best={};if(!o.streak.runs)o.streak.runs=[];return o;}}catch(e){}return fresh();}
 var S=load();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
@@ -34,6 +34,7 @@ function page(h){app.innerHTML='<div class="page" id="pg">'+h+'</div>';var p=doc
 
 /* scheduling */
 function st(id){return S.cards[id];}
+function lvl(list){return S.set.hard?list.filter(function(c){return c.diff>=3;}):list;}
 function counts(){var t=today(),due=0,miss=0,seen=0,mast=0;CARDS.forEach(function(c){var s=st(c.id);if(s){seen++;if(s.d<=t)due++;if(s.m)miss++;if(s.b>=3)mast++;}});return {due:due,miss:miss,seen:seen,mast:mast};}
 function buildDeck(list,n){
   var t=today(),due=[],nw=[],rest=[];
@@ -177,7 +178,7 @@ function viewHome(){
   h+=row('Streak',(S.streak.best[sc.level]?'Best '+S.streak.best[sc.level]:'Randomized'),'streakset');
   if(c.miss)h+=row('Missed',String(c.miss),'missed');
   h+='<div class="sec">Topics</div>';
-  TOPICS.forEach(function(t){var all=CARDS.filter(function(x){return x.topic===t;}),seen=all.filter(function(x){return st(x.id);}).length;h+=row(t,seen+' / '+all.length,'topic',t);});
+  TOPICS.forEach(function(t){var all=lvl(CARDS.filter(function(x){return x.topic===t;}));if(!all.length)all=CARDS.filter(function(x){return x.topic===t;});var seen=all.filter(function(x){return st(x.id);}).length;h+=row(t,seen+' / '+all.length,'topic',t);});
   h+='<div class="foot"><button data-act="progress">Progress</button><button data-act="settings">Settings</button></div>';
   page(h);
 }
@@ -207,6 +208,7 @@ function viewProgress(){
 function viewSettings(){
   var h='<div class="top" style="padding:0 0 10px"><button data-act="home">Back</button><span></span></div><h1>Settings</h1><div class="sub">'+CARDS.length+' cards · build '+esc(window.DRILL_BUILD||'dev')+'</div>';
   h+='<div class="sec">Appearance</div><div class="opts">'+[['auto','Auto'],['light','Light'],['dark','Dark']].map(function(x){return opt(x[1],S.set.theme===x[0],'theme',x[0]);}).join('')+'</div>';
+  h+='<div class="sec">Difficulty</div><div class="opts">'+opt('All cards',!S.set.hard,'hard',0)+opt('Hard only',!!S.set.hard,'hard',1)+'</div><div class="note">Hard only skips basic and core cards in topics and review.</div>';
   h+='<div class="sec">Cards per session</div><div class="opts">'+[10,15,20,30,50].map(function(n){return opt(String(n),S.set.per===n,'per',n);}).join('')+'</div>';
   h+='<div class="sec">Backup</div><div class="note">Progress lives on this phone. Save a copy now and then.</div><button class="link" data-act="share">Save backup file</button><button class="link" data-act="copybk">Copy backup text</button>';
   h+='<div class="sec">Restore</div><textarea id="rs" placeholder="Paste backup text"></textarea><button class="link" data-act="restore">Restore</button>';
@@ -236,10 +238,10 @@ function act(a,v){
   switch(a){
     case 'home':sess=null;V='home';arm=false;render();break;
     case 'resume':if(!resumeSess()){clearResume();toast('Nothing to continue');}render();break;
-    case 'review':var due=CARDS.filter(function(c){var s=st(c.id);return s&&s.d<=today();});startDeck('Review',buildDeck(due.length?due.concat(CARDS.filter(function(c){return !st(c.id);})):CARDS,S.set.per));break;
+    case 'review':var due=lvl(CARDS).filter(function(c){var s=st(c.id);return s&&s.d<=today();});startDeck('Review',buildDeck(due.length?due.concat(lvl(CARDS).filter(function(c){return !st(c.id);})):lvl(CARDS),S.set.per));break;
     case 'mental':startMental();break;
     case 'missed':startDeck('Missed',shuffle(CARDS.filter(function(c){var s=st(c.id);return s&&s.m;})));break;
-    case 'topic':startDeck(v,buildDeck(CARDS.filter(function(c){return c.topic===v;}),S.set.per));break;
+    case 'topic':var tl=CARDS.filter(function(c){return c.topic===v;}),hl=lvl(tl);startDeck(v,buildDeck(hl.length?hl:tl,S.set.per));break;
     case 'streakset':V='streakset';render();break;
     case 'stopic':sc.topic=v;render();break;
     case 'slevel':sc.level=+v;render();break;
@@ -258,6 +260,7 @@ function act(a,v){
     case 'redo':var seen={},ms=sess.missed.filter(function(c){if(seen[c.id])return false;seen[c.id]=1;return true;});startDeck('Missed',shuffle(ms));break;
     case 'copyres':copyText(streakText(),'Copied');break;
     case 'theme':S.set.theme=v;save();theme();render();break;
+    case 'hard':S.set.hard=v==='1';save();render();break;
     case 'per':S.set.per=+v;save();render();break;
     case 'share':shareBackup();break;
     case 'copybk':copyText(JSON.stringify(S),'Backup copied');break;
